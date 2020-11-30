@@ -1,0 +1,48 @@
+const path = require('path')
+
+module.exports = {
+    entry:{
+        index: './src/js/index.js'
+    },
+    output: {
+        filename: '[name].bundle.js',
+        path: path.join(__dirname, '/dist')
+    },
+    devServer:{
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use:{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                      }
+                }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'}, 
+                ]
+            }
+        ]
+    },
+    optimization:{
+        splitChunks:{
+            cacheGroups:{
+                commons:{
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'common',
+                    chunks: 'all'
+                }
+            }
+        }
+    }
+}
